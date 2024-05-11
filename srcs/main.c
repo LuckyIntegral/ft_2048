@@ -14,16 +14,31 @@
 #include <ncurses.h>
 #include <stdio.h>
 
-int board[SIZE][SIZE];
-
-void printBoard()
+void initialize(int size, int board[size][size])
 {
 	int i, j;
-	printf("+----+----+----+----+\n");
-	for (i = 0; i < SIZE; i++)
+	for (i = 0; i < size; i++)
+	{
+		for (j = 0; j < size; j++)
+		{
+			board[i][j] = 0;
+		}
+	}
+}
+
+void print_board(int size, int board[size][size])
+{
+	int i, j;
+	if (size == 3)
+		printf("+----+----+----+\n");
+	if (size == 4)
+		printf("+----+----+----+----+\n");
+	if (size == 5)
+		printf("+----+----+----+----+----+\n");
+	for (i = 0; i < size; i++)
 	{
 		printf("|");
-		for (j = 0; j < SIZE; j++)
+		for (j = 0; j < size; j++)
 		{
 			if (board[i][j] == 0)
 			{
@@ -76,16 +91,21 @@ void printBoard()
 			}
 		}
 		printf("\n");
-		printf("+----+----+----+----+\n");
+		if (size == 3)
+			printf("+----+----+----+\n");
+		if (size == 4)
+			printf("+----+----+----+----+\n");
+		if (size == 5)
+			printf("+----+----+----+----+----+\n");
 	}
 }
 
-int isFull()
+int is_full(int size, int board[size][size])
 {
 	int i, j;
-	for (i = 0; i < SIZE; i++)
+	for (i = 0; i < size; i++)
 	{
-		for (j = 0; j < SIZE; j++)
+		for (j = 0; j < size; j++)
 		{
 			if (board[i][j] == 0)
 			{
@@ -96,125 +116,135 @@ int isFull()
 	return 1;
 }
 
-void generateNumber()
+void generate_number(int size, int board[size][size])
 {
-	if (!isFull())
+	if (!is_full(size, board))
 	{
 		int i, j;
 		do
 		{
-			i = rand() % SIZE;
-			j = rand() % SIZE;
+			i = rand() % size;
+			j = rand() % size;
 		} while (board[i][j] != 0);
 		int value = (rand() % 10 == 0) ? 4 : 2;
 		board[i][j] = value;
 	}
 }
 
-void moveLeft()
+bool move_left(int size, int board[size][size])
 {
 	int i, j;
 	bool moved = true;
+	bool res = false;
 	while (moved)
 	{
 		moved = false;
-		for (i = 0; i < SIZE; i++)
+		for (i = 0; i < size; i++)
 		{
-			for (j = 0; j < SIZE - 1; j++)
+			for (j = 0; j < size - 1; j++)
 			{
 				if (board[i][j] == 0 && board[i][j + 1] != 0)
 				{
 					board[i][j] = board[i][j + 1];
 					board[i][j + 1] = 0;
 					moved = true;
+					res = true;
 				}
 			}
 		}
 	}
+	return res;
 }
 
-void mergeLeft()
+bool merge_left(int size, int board[size][size])
 {
+	bool res = false;
 	int i, j;
-	for (i = 0; i < SIZE; i++)
+	for (i = 0; i < size; i++)
 	{
-		for (j = 0; j < SIZE - 1; j++)
+		for (j = 0; j < size - 1; j++)
 		{
 			if (board[i][j] == board[i][j + 1] && board[i][j] != 0)
 			{
 				board[i][j] *= 2;
 				board[i][j + 1] = 0;
+				res = true;
 			}
 		}
 	}
+	return res;
 }
 
-void shiftLeft()
+bool shift_left(int size, int board[size][size])
 {
-	moveLeft();
-	mergeLeft();
-	moveLeft();
+	bool first, second, third;
+	first = move_left(size, board);
+	second = merge_left(size, board);
+	third = move_left(size, board);
+	return first || second || third;
 }
 
-void rotateBoardClockwise()
+void rotate_board_clockwise(int size, int board[size][size])
 {
 	int i, j, temp;
-	for (i = 0; i < SIZE / 2; i++)
+	for (i = 0; i < size / 2; i++)
 	{
-		for (j = i; j < SIZE - i - 1; j++)
+		for (j = i; j < size - i - 1; j++)
 		{
 			temp = board[i][j];
-			board[i][j] = board[SIZE - 1 - j][i];
-			board[SIZE - 1 - j][i] = board[SIZE - 1 - i][SIZE - 1 - j];
-			board[SIZE - 1 - i][SIZE - 1 - j] = board[j][SIZE - 1 - i];
-			board[j][SIZE - 1 - i] = temp;
+			board[i][j] = board[size - 1 - j][i];
+			board[size - 1 - j][i] = board[size - 1 - i][size - 1 - j];
+			board[size - 1 - i][size - 1 - j] = board[j][size - 1 - i];
+			board[j][size - 1 - i] = temp;
 		}
 	}
 }
 
-void moveAndMerge(char direction)
+bool move_and_merge(char direction, int size, int board[size][size])
 {
+	bool res = false;
 	switch (direction)
 	{
 		case 'S':
 		case 's':
-			rotateBoardClockwise();
-			shiftLeft();
-			rotateBoardClockwise();
-			rotateBoardClockwise();
-			rotateBoardClockwise();
+			rotate_board_clockwise(size, board);
+			res = shift_left(size, board);
+			rotate_board_clockwise(size, board);
+			rotate_board_clockwise(size, board);
+			rotate_board_clockwise(size, board);
 			break;
 		case 'A':
 		case 'a':
-			shiftLeft();
+			res = shift_left(size, board);
 			break;
 		case 'D':
 		case 'd':
-			rotateBoardClockwise();
-			rotateBoardClockwise();
-			shiftLeft();
-			rotateBoardClockwise();
-			rotateBoardClockwise();
+			rotate_board_clockwise(size, board);
+			rotate_board_clockwise(size, board);
+			res = shift_left(size, board);
+			rotate_board_clockwise(size, board);
+			rotate_board_clockwise(size, board);
 			break;
 		case 'W':
 		case 'w':
-			rotateBoardClockwise();
-			rotateBoardClockwise();
-			rotateBoardClockwise();
-			shiftLeft();
-			rotateBoardClockwise();
+			rotate_board_clockwise(size, board);
+			rotate_board_clockwise(size, board);
+			rotate_board_clockwise(size, board);
+			res = shift_left(size, board);
+			rotate_board_clockwise(size, board);
 			break;
 		default:
 			printf("Invalid move! Please try again.\n");
 	}
+	return res;
 }
 
-int gameOver()
+int game_over(int size, int board[size][size])
 {
 	int i, j;
-	for (i = 0; i < SIZE; i++)
+	for (i = 0; i < size; i++)
 	{
-		for (j = 0; j < SIZE; j++)
+		for (j = 0; j < size; j++)
 		{
 			if (board[i][j] == WIN_VALUE)
 			{
@@ -222,16 +252,16 @@ int gameOver()
 			}
 		}
 	}
-	for (i = 0; i < SIZE; i++)
+	for (i = 0; i < size; i++)
 	{
-		for (j = 0; j < SIZE; j++)
+		for (j = 0; j < size; j++)
 		{
 			if (board[i][j] == 0)
 			{
 				return GAME_CONTINUE;
 			}
-			if ((i < SIZE - 1 && board[i][j] == board[i + 1][j]) ||
-				(j < SIZE - 1 && board[i][j] == board[i][j + 1]))
+			if ((i < size - 1 && board[i][j] == board[i + 1][j]) ||
+				(j < size - 1 && board[i][j] == board[i][j + 1]))
 				{
 				return GAME_CONTINUE;
 			}
@@ -274,7 +304,37 @@ int init()
 
 int main()
 {
-	int grid_size = select_menu();
-	printf("grid_size: %d\n", grid_size);
+	int size = 5;
+	int board[size][size];
+	bool moved = false;
+
+	srand(time(NULL));
+	initialize(size, board);
+	generate_number(size, board);
+	generate_number(size, board);
+	print_board(size, board);
+	while (1)
+	{
+		char userInput;
+		printf("Enter your move (W - Up, A - Left, S - Down, D - Right): ");
+		scanf(" %c", &userInput);
+		moved = move_and_merge(userInput, size, board);
+		if (game_over(size, board) == GAME_WON)
+		{
+			printf("Congratulations! You win!\n");
+			break;
+		}
+		else if (game_over(size, board) == GAME_LOST)
+		{
+			printf("Game over! You lose!\n");
+			break;
+		}
+		else if (moved)
+		{
+			generate_number(size, board);
+			print_board(size, board);
+			moved = false;
+		}
+	}
 	return 0;
 }
