@@ -6,26 +6,15 @@
 /*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 14:28:52 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/11 14:32:02 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:52:13 by vfrants          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/wong_kar_wai.h"
+#include <ncurses.h>
 #include <stdio.h>
 
 int board[SIZE][SIZE];
-
-void initialize()
-{
-	int i, j;
-	for (i = 0; i < SIZE; i++)
-	{
-		for (j = 0; j < SIZE; j++)
-		{
-			board[i][j] = 0;
-		}
-	}
-}
 
 void printBoard()
 {
@@ -251,34 +240,41 @@ int gameOver()
 	return GAME_LOST;
 }
 
+int init()
+{
+	// srand(time(NULL));
+	// initialize();
+	// generateNumber();
+	// generateNumber();
+	// printBoard();
+	// while (1)
+	// {
+	// 	char userInput;
+	// 	printf("Enter your move (W - Up, A - Left, S - Down, D - Right): ");
+	// 	scanf(" %c", &userInput);
+	// 	moveAndMerge(userInput);
+	// 	if (gameOver() == GAME_WON)
+	// 	{
+	// 		printf("Congratulations! You win!\n");
+	// 		return 0;
+	// 	}
+	// 	else if (gameOver() == GAME_LOST)
+	// 	{
+	// 		printf("Game over! You lose!\n");
+	// 		return 0;
+	// 	}
+	// 	else
+	// 	{
+	// 		generateNumber();
+	// 		printBoard();
+	// 	}
+	// }
+	return 1;
+}
+
 int main()
 {
-	srand(time(NULL));
-	initialize();
-	generateNumber();
-	generateNumber();
-	printBoard();
-	while (1)
-	{
-		char userInput;
-		printf("Enter your move (W - Up, A - Left, S - Down, D - Right): ");
-		scanf(" %c", &userInput);
-		moveAndMerge(userInput);
-		if (gameOver() == GAME_WON)
-		{
-			printf("Congratulations! You win!\n");
-			break;
-		}
-		else if (gameOver() == GAME_LOST)
-		{
-			printf("Game over! You lose!\n");
-			break;
-		}
-		else
-		{
-			generateNumber();
-			printBoard();
-		}
-	}
+	int grid_size = select_menu();
+	printf("grid_size: %d\n", grid_size);
 	return 0;
 }

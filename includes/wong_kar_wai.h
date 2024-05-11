@@ -6,7 +6,7 @@
 /*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/11 14:28:27 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:22:18 by vfrants          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,20 @@
 
 # include "../libft/libft.h"
 
+# include <ncurses.h>
 # include <stdbool.h>
+# include <signal.h>
 # include <stdlib.h>
+# include <locale.h>
 # include <stdio.h>
 # include <time.h>
 
 # ifndef SIZE
 #  define SIZE 4
 # endif
+
+# define MIN_WIDTH 20
+# define MIN_HEIGHT 10
 
 enum e_const
 {
@@ -44,5 +50,13 @@ typedef enum e_direction
     GAME_LOST,
     GAME_CONTINUE,
 }	t_direction;
+
+typedef enum e_selection
+{
+    SELECTED,
+    NOT_SELECTED,
+}	t_selection;
+
+int select_menu(void);
 
 #endif // WONG_KAR_WAI_H

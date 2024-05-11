@@ -11,6 +11,7 @@ MAKEFLAGS	= -j$(nproc) --no-print-directory
 NAME		= 2048
 SRCSDIR		= srcs
 SRCS		= \
+			${SRCSDIR}/menu.c \
 			${SRCSDIR}/main.c
 
 OBJSDIR		= objs
