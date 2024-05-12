@@ -1,48 +1,77 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   wong_kar_wai.h                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/11 14:28:27 by vfrants          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef WONG_KAR_WAI_H
 # define WONG_KAR_WAI_H
 
 # include "../libft/libft.h"
 
+# include <ncurses.h>
 # include <stdbool.h>
-# include <stdlib.h>
-# include <stdio.h>
+# include <signal.h>
 # include <time.h>
 
-# ifndef SIZE
-#  define SIZE 4
-# endif
+# define GRID_THREE_MIN_WIDTH 39
+# define GRID_THREE_MIN_HEIGHT 19
+# define GRID_FOUR_MIN_WIDTH 83
+# define GRID_FOUR_MIN_HEIGHT 27
+# define GRID_FIVE_MIN_WIDTH 163
+# define GRID_FIVE_MIN_HEIGHT 33
 
 enum e_const
 {
     WIN_VALUE = 2048
 };
 
-# define ANSI_COLOR_RED     "\x1b[31m"
-# define ANSI_COLOR_GREEN   "\x1b[32m"
-# define ANSI_COLOR_YELLOW  "\x1b[33m"
-# define ANSI_COLOR_BLUE    "\x1b[34m"
-# define ANSI_COLOR_MAGENTA "\x1b[35m"
-# define ANSI_COLOR_CYAN    "\x1b[36m"
-# define ANSI_COLOR_WHITE   "\x1b[37m"
-# define ANSI_COLOR_RESET   "\x1b[0m"
+# define ERROR_SMALL_SCREEN "Please resize the window to at least 99x29\n"
+# define ERROR_BAD_USERNAME "Please enter a valid username\n"
+# define KEY_ESC 27
+# define LEADERBOARD_FILE "leaderboard.txt"
+# define MAX_NICKNAME_LEN 10
+# define MAX_RECORD_LEN 30
 
-typedef enum e_direction
+typedef unsigned long long   t_score;
+
+typedef struct  s_record
+{
+    char    *name;
+    t_score score;
+}   t_record;
+
+typedef enum e_number_len
+{
+    SIZE_THREE = 3,
+    SIZE_FOUR = 5,
+    SIZE_FIVE = 8,
+}  t_number_len;
+
+typedef enum e_status
 {
     GAME_WON,
     GAME_LOST,
     GAME_CONTINUE,
-}	t_direction;
+}	t_status;
+
+typedef enum e_selection
+{
+    SELECTED,
+    NOT_SELECTED,
+}	t_selection;
+
+extern int  received_signal;
+
+void    print_board(WINDOW *win, const int size,
+            int board[size][size], const int nbr_len, t_score score);
+bool    move_and_merge(int direction, int size,
+            int board[size][size], t_score *score);
+void	add_record(t_list **leaderboard, t_score score, char *name);
+void    rotate_board_clockwise(int size, int board[size][size]);
+int     select_menu(char **username, t_list *leaderboard);
+void    generate_number(int size, int board[size][size]);
+int     game_over(int size, int board[size][size]);
+int     save_leaderboard(t_list *leaderboard);
+void	free_record(void *record);
+t_list	*read_leaderboard(bool *error);
+void    resize_handler(int sig);
+t_list  *ft_lstsort(t_list *lst);
+WINDOW  *init(void);
 
 #endif // WONG_KAR_WAI_H
