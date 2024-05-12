@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_display.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkafanov <tkafanov@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/12 13:39:19 by tkafanov          #+#    #+#             */
+/*   Updated: 2024/05/12 13:55:54 by tkafanov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "../includes/wong_kar_wai.h"
 
@@ -24,32 +36,16 @@ static void print_grid(const int size, const int nbr_len)
 	const int limit_col = size * 6;
 
 	for (int col = 0; col <= size; col++)
-	{
-		int col_x = (nbr_len * 4) * col;
 		for (int row = 0; row < limit_col; row++)
-		{
-			mvprintw(row + 1, col_x + 1, "|");
-		}
-	}
+			mvprintw(row + 1, (nbr_len * 4) * col + 1, "|");
 
 	for (int row = 0; row <= size; row++)
-	{
-		int row_y = 6 * row;
 		for (int col = 0; col < limit_row; col++)
-		{
-			mvprintw(row_y + 1, col + 1, "-");
-		}
-	}
+			mvprintw(6 * row + 1, col + 1, "-");
 
 	for (int x = 0; x <= size; x++)
-	{
-		int distance = nbr_len * 4 * x + 1;
 		for (int y = 0; y <= size; y++)
-		{
-			int distance_y = 6 * y + 1;
-			mvprintw(distance_y, distance, "+");
-		}
-	}
+			mvprintw(6 * y + 1, nbr_len * 4 * x + 1, "+");
 }
 
 static inline void getxy(int col, int row, const int nbr_len, int *x, int *y)
@@ -76,9 +72,7 @@ static void put_digit_w(int x, int y, int nbr)
 	const char **number = ft_number(nbr);
 
 	for (int i = 0; i < 5; i++)
-	{
 		mvprintw(y + i, x, "%s", number[i]);
-	}
 }
 
 static void put_nbr_w(int x, int y, int nbr)
@@ -107,6 +101,15 @@ static void print_score(const int size, t_score score)
 	mvprintw(1, x - 6, "Score: %llu", score);
 }
 
+int power_of_two(int nbr)
+{
+	int counter = 0;
+
+	while (nbr >> counter > 0)
+		counter++;
+	return counter;
+}
+
 void print_board(WINDOW *win, const int size, int board[size][size], const int nbr_len, t_score score)
 {
 	int x, y;
@@ -118,39 +121,16 @@ void print_board(WINDOW *win, const int size, int board[size][size], const int n
 	print_score(size, score);
 
 	for (int row = 0; row < size; row++)
-	{
 		for (int col = 0; col < size; col++)
 		{
 			if (board[row][col] == 0)
 				continue;
+			// int color = power_of_two(board[row][col]) % 5 + 1;
+			wattron(win, COLOR_PAIR(power_of_two(board[row][col]) % 5 + 1));
 			getxy(col, row, nbr_len, &x, &y);
-			if (board[row][col] == 2)
-				wattron(win, COLOR_PAIR(1));
-			if (board[row][col] == 4 || board[row][col] == 128)
-				wattron(win, COLOR_PAIR(2));
-			if (board[row][col] == 8 || board[row][col] == 256)
-				wattron(win, COLOR_PAIR(3));
-			if (board[row][col] == 16 || board[row][col] == 512)
-				wattron(win, COLOR_PAIR(4));
-			if (board[row][col] == 32 || board[row][col] == 1024)
-				wattron(win, COLOR_PAIR(5));
-			if (board[row][col] == 64 || board[row][col] == 2048)
-				wattron(win, COLOR_PAIR(6));
 			put_nbr_w(x, y, board[row][col]);
-			if (board[row][col] == 2)
-				wattroff(win, COLOR_PAIR(1));
-			if (board[row][col] == 4 || board[row][col] == 128)
-				wattroff(win, COLOR_PAIR(2));
-			if (board[row][col] == 8 || board[row][col] == 256)
-				wattroff(win, COLOR_PAIR(3));
-			if (board[row][col] == 16 || board[row][col] == 512)
-				wattroff(win, COLOR_PAIR(4));
-			if (board[row][col] == 32 || board[row][col] == 1024)
-				wattroff(win, COLOR_PAIR(5));
-			if (board[row][col] == 64 || board[row][col] == 2048)
-				wattroff(win, COLOR_PAIR(6));
+			// wattroff(win, COLOR_PAIR(color));
 		}
-	}
 
 	wrefresh(win);
 }

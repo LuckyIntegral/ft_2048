@@ -2,19 +2,12 @@
 #include "../includes/wong_kar_wai.h"
 #include <stdbool.h>
 
-static int is_full(int size, int board[size][size])
+static inline int is_full(int size, int board[size][size])
 {
-	int i, j;
-	for (i = 0; i < size; i++)
-	{
-		for (j = 0; j < size; j++)
-		{
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size; j++)
 			if (board[i][j] == 0)
-			{
 				return 0;
-			}
-		}
-	}
 	return 1;
 }
 
@@ -35,16 +28,13 @@ void generate_number(int size, int board[size][size])
 
 static bool move_left(int size, int board[size][size])
 {
-	int i, j;
 	bool moved = true;
 	bool res = false;
 	while (moved)
 	{
 		moved = false;
-		for (i = 0; i < size; i++)
-		{
-			for (j = 0; j < size - 1; j++)
-			{
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size - 1; j++)
 				if (board[i][j] == 0 && board[i][j + 1] != 0)
 				{
 					board[i][j] = board[i][j + 1];
@@ -52,8 +42,6 @@ static bool move_left(int size, int board[size][size])
 					moved = true;
 					res = true;
 				}
-			}
-		}
 	}
 	return res;
 }
@@ -61,11 +49,9 @@ static bool move_left(int size, int board[size][size])
 static bool merge_left(int size, int board[size][size], t_score *score)
 {
 	bool res = false;
-	int i, j;
-	for (i = 0; i < size; i++)
-	{
-		for (j = 0; j < size - 1; j++)
-		{
+	
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size - 1; j++)
 			if (board[i][j] == board[i][j + 1] && board[i][j] != 0)
 			{
 				*score += board[i][j];
@@ -73,8 +59,6 @@ static bool merge_left(int size, int board[size][size], t_score *score)
 				board[i][j + 1] = 0;
 				res = true;
 			}
-		}
-	}
 	return res;
 }
 
@@ -91,7 +75,6 @@ void rotate_board_clockwise(int size, int board[size][size])
 {
 	int i, j, temp;
 	for (i = 0; i < size / 2; i++)
-	{
 		for (j = i; j < size - i - 1; j++)
 		{
 			temp = board[i][j];
@@ -100,15 +83,13 @@ void rotate_board_clockwise(int size, int board[size][size])
 			board[size - 1 - i][size - 1 - j] = board[j][size - 1 - i];
 			board[j][size - 1 - i] = temp;
 		}
-	}
 }
 
 bool move_and_merge(int direction, int size, int board[size][size], t_score *score)
 {
 	if (direction == -1)
-	{
 		return false;
-	}
+
 	bool res = false;
 	switch (direction)
 	{
@@ -145,15 +126,9 @@ bool move_and_merge(int direction, int size, int board[size][size], t_score *sco
 bool is_won(int size, int board[size][size])
 {
 	for (int i = 0; i < size; i++)
-	{
 		for (int j = 0; j < size; j++)
-		{
 			if (board[i][j] == WIN_VALUE)
-			{
 				return true;
-			}
-		}
-	}
 	return false;
 }
 
@@ -167,19 +142,11 @@ int game_over(int size, int board[size][size])
 		return GAME_WON;
 	}
 	for (int i = 0; i < size; i++)
-	{
 		for (int j = 0; j < size; j++)
-		{
 			if (board[i][j] == 0)
-			{
 				return GAME_CONTINUE;
-			}
-			if ((i < size - 1 && board[i][j] == board[i + 1][j])
+			else if ((i < size - 1 && board[i][j] == board[i + 1][j])
 				|| (j < size - 1 && board[i][j] == board[i][j + 1]))
-				{
 				return GAME_CONTINUE;
-			}
-		}
-	}
 	return GAME_LOST;
 }

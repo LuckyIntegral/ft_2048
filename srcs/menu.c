@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: tkafanov <tkafanov@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:36 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 01:36:18 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/12 14:14:15 by tkafanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ WINDOW	*init(void)
 	init_pair(1, COLOR_WHITE, COLOR_BLACK);
 
 	getmaxyx(main_window, height, width);
-	if (height < MENU_MIN_HEIGHT || width < MENU_MIN_WIDTH)
+	if (height < GRID_THREE_MIN_HEIGHT || width < GRID_THREE_MIN_WIDTH)
 	{
 		endwin();
-		ft_putendl_fd("Please resize the window to at least dxd", 2);
+		ft_putendl_fd(ERROR_SMALL_SCREEN, 2);
 		return NULL;
 	}
 
@@ -70,22 +70,13 @@ int input_listener(int *selected)
 	int ch = getch();
 
 	if (ch == 10)
-	{
 		return (SELECTED);
-	}
 	else if (ch == KEY_UP)
-	{
 		*selected = (*selected - 1) > 2 ? *selected - 1 : 5;
-	}
 	else if (ch == KEY_DOWN)
-	{
 		*selected = (*selected + 1) < 6 ? *selected + 1 : 3;
-	}
 	else if (ch == KEY_ESC)
-	{
-		*selected = 0;
-		return (SELECTED);
-	}
+		return (*selected = 0, SELECTED);
 	return (NOT_SELECTED);
 }
 
@@ -96,9 +87,7 @@ int select_menu(void)
 	endwin();
 	main_window = init();
 	if (main_window == NULL)
-	{
 		return 0;
-	}
 	display_options(main_window, selected);
 
 	while (1)
@@ -108,19 +97,13 @@ int select_menu(void)
 			endwin();
 			main_window = init();
 			if (main_window == NULL)
-			{
 				return 0;
-			}
 			received_signal = 0;
 		}
 		if (input_listener(&selected) == SELECTED)
-		{
 			break;
-		}
 		else
-		{
 			display_options(main_window, selected);
-		}
 	}
 	endwin();
 	return (selected);

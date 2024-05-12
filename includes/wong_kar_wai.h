@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wong_kar_wai.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: tkafanov <tkafanov@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 02:37:57 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/12 14:07:37 by tkafanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@
 # include <stdio.h>
 # include <time.h>
 
-# ifndef SIZE
-#  define SIZE 4
-# endif
-
-# define MENU_MIN_WIDTH 39
-# define MENU_MIN_HEIGHT 19
 # define GRID_THREE_MIN_WIDTH 39
 # define GRID_THREE_MIN_HEIGHT 19
 # define GRID_FOUR_MIN_WIDTH 83
@@ -41,15 +35,7 @@ enum e_const
     WIN_VALUE = 2048
 };
 
-# define ANSI_COLOR_RED     "\x1b[31m"
-# define ANSI_COLOR_GREEN   "\x1b[32m"
-# define ANSI_COLOR_YELLOW  "\x1b[33m"
-# define ANSI_COLOR_BLUE    "\x1b[34m"
-# define ANSI_COLOR_MAGENTA "\x1b[35m"
-# define ANSI_COLOR_CYAN    "\x1b[36m"
-# define ANSI_COLOR_WHITE   "\x1b[37m"
-# define ANSI_COLOR_RESET   "\x1b[0m"
-
+# define ERROR_SMALL_SCREEN "Please resize the window to at least 99x29\n"
 # define KEY_ESC 27
 
 typedef unsigned long long int  t_score;
