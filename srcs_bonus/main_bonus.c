@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 14:28:52 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 18:22:56 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/12 18:22:26 by vfrants          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,21 @@ void put_final_window(t_score score)
 
 int main()
 {
+	t_list	*leaderboard = NULL;
+	char 	*username = NULL;
 	int 	size = 4;
+	{
+		bool error = false;
+		leaderboard = read_leaderboard(&error);
+		if (error)
+			return (ft_putendl_fd("Error reading leaderboard", 2), 1);
+		size = select_menu(&username, leaderboard);
+		if (size == 0)
+		{
+			ft_lstclear(&leaderboard, free_record);
+			return (ft_putendl_fd(ERROR_SMALL_SCREEN, 2), 0);
+		}
+	}
 	const int nbr_len = size == 3 ? SIZE_THREE : size == 4 ? SIZE_FOUR : SIZE_FIVE;
 	int board[size][size];
 	srand(time(NULL));
@@ -150,6 +164,10 @@ int main()
 		t_score score = game_loop(win, size, board, nbr_len);
 		put_final_window(score);
 		endwin();
+		add_record(&leaderboard, score, username);
+		leaderboard = ft_lstsort(leaderboard);
 	}
+	save_leaderboard(leaderboard);
+	ft_lstclear(&leaderboard, free_record);
 	return 0;
 }

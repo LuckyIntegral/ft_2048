@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wong_kar_wai.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkafanov <tkafanov@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 14:07:37 by tkafanov         ###   ########.fr       */
+/*   Updated: 2024/05/12 18:26:34 by vfrants          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,17 @@ enum e_const
 
 # define ERROR_SMALL_SCREEN "Please resize the window to at least 99x29\n"
 # define KEY_ESC 27
+# define LEADERBOARD_FILE "leaderboard.txt"
+# define MAX_NICKNAME_LEN 10
+# define MAX_RECORD_LEN 30
 
 typedef unsigned long long int  t_score;
+
+typedef struct  s_record
+{
+    char    *name;
+    t_score score;
+}   t_record;
 
 typedef enum e_number_len
 {
@@ -66,11 +75,16 @@ void    print_board(WINDOW *win, const int size,
             int board[size][size], const int nbr_len, t_score score);
 bool    move_and_merge(int direction, int size,
             int board[size][size], t_score *score);
+void	add_record(t_list **leaderboard, t_score score, char *name);
 void    rotate_board_clockwise(int size, int board[size][size]);
+int     select_menu(char **username, t_list *leaderboard);
 void    generate_number(int size, int board[size][size]);
 int     game_over(int size, int board[size][size]);
+int     save_leaderboard(t_list *leaderboard);
+void	free_record(void *record);
+t_list	*read_leaderboard(bool *error);
 void    resize_handler(int sig);
-int     select_menu(void);
+t_list  *ft_lstsort(t_list *lst);
 WINDOW  *init(void);
 
 #endif // WONG_KAR_WAI_H
