@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wong_kar_wai.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: tkafanov <tkafanov@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 18:26:34 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/12 18:39:26 by tkafanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <signal.h>
 # include <stdlib.h>
 # include <locale.h>
-# include <stdio.h>
 # include <time.h>
 
 # define GRID_THREE_MIN_WIDTH 39
