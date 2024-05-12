@@ -6,7 +6,7 @@
 /*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/11 17:22:18 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/12 02:37:57 by vfrants          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,14 @@
 #  define SIZE 4
 # endif
 
-# define MIN_WIDTH 20
-# define MIN_HEIGHT 10
+# define MENU_MIN_WIDTH 39
+# define MENU_MIN_HEIGHT 19
+# define GRID_THREE_MIN_WIDTH 39
+# define GRID_THREE_MIN_HEIGHT 19
+# define GRID_FOUR_MIN_WIDTH 83
+# define GRID_FOUR_MIN_HEIGHT 27
+# define GRID_FIVE_MIN_WIDTH 163
+# define GRID_FIVE_MIN_HEIGHT 33
 
 enum e_const
 {
@@ -44,12 +50,23 @@ enum e_const
 # define ANSI_COLOR_WHITE   "\x1b[37m"
 # define ANSI_COLOR_RESET   "\x1b[0m"
 
-typedef enum e_direction
+# define KEY_ESC 27
+
+typedef unsigned long long int  t_score;
+
+typedef enum e_number_len
+{
+    SIZE_THREE = 3,
+    SIZE_FOUR = 5,
+    SIZE_FIVE = 8,
+}  t_number_len;
+
+typedef enum e_status
 {
     GAME_WON,
     GAME_LOST,
     GAME_CONTINUE,
-}	t_direction;
+}	t_status;
 
 typedef enum e_selection
 {
@@ -57,6 +74,17 @@ typedef enum e_selection
     NOT_SELECTED,
 }	t_selection;
 
-int select_menu(void);
+extern int  received_signal;
+
+void    print_board(WINDOW *win, const int size,
+            int board[size][size], const int nbr_len, t_score score);
+bool    move_and_merge(int direction, int size,
+            int board[size][size], t_score *score);
+void    rotate_board_clockwise(int size, int board[size][size]);
+void    generate_number(int size, int board[size][size]);
+int     game_over(int size, int board[size][size]);
+void    resize_handler(int sig);
+int     select_menu(void);
+WINDOW  *init(void);
 
 #endif // WONG_KAR_WAI_H

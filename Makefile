@@ -11,6 +11,9 @@ MAKEFLAGS	= -j$(nproc) --no-print-directory
 NAME		= 2048
 SRCSDIR		= srcs
 SRCS		= \
+			${SRCSDIR}/game_display.c \
+			${SRCSDIR}/signals.c \
+			${SRCSDIR}/game.c \
 			${SRCSDIR}/menu.c \
 			${SRCSDIR}/main.c
 

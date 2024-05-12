@@ -6,42 +6,32 @@
 /*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:36 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/11 17:22:32 by vfrants          ###   ########.fr       */
+/*   Updated: 2024/05/12 01:36:18 by vfrants          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/wong_kar_wai.h"
 
-int received_signal = 0;
-
-static void resizeHandler(int sig)
-{
-	if (sig == SIGWINCH)
-	{
-		received_signal = SIGWINCH;
-	}
-}
-
-static WINDOW	*init(void)
+WINDOW	*init(void)
 {
 	int width = 0, height = 0;
 
-	WINDOW *main_window = initscr();	// initialize ncurses and create a window
-	signal(SIGWINCH, resizeHandler);	// handle window resize
-	setlocale(LC_ALL, "");				// now we can use unicode
-	noecho(); 							// don't echo any keypresses
-	keypad(stdscr, TRUE); 				// enable special keys like arrow keys
-	curs_set(0); 						// hide the cursor
-	nodelay(main_window, TRUE);			// make getch non-blocking
-	start_color();						// enable colors
+	WINDOW *main_window = initscr();		// initialize ncurses and create a window
+	signal(SIGWINCH, resize_handler);		// handle window resize
+	setlocale(LC_ALL, "");					// now we can use unicode
+	noecho(); 								// don't echo any keypresses
+	keypad(stdscr, TRUE); 					// enable special keys like arrow keys
+	curs_set(0); 							// hide the cursor
+	nodelay(main_window, TRUE);				// make getch non-blocking
+	start_color();							// enable colors
 	init_pair(1, COLOR_WHITE, COLOR_BLACK);
 
 	getmaxyx(main_window, height, width);
-	if (height < MIN_HEIGHT || width < MIN_WIDTH)
+	if (height < MENU_MIN_HEIGHT || width < MENU_MIN_WIDTH)
 	{
 		endwin();
-		printf("Please resize the window to at least 20x10\n");
-		exit(1);
+		ft_putendl_fd("Please resize the window to at least dxd", 2);
+		return NULL;
 	}
 
 	return (main_window);
@@ -79,7 +69,7 @@ int input_listener(int *selected)
 	timeout(1000);
 	int ch = getch();
 
-	if (ch == 10 || ch == 'q')
+	if (ch == 10)
 	{
 		return (SELECTED);
 	}
@@ -91,6 +81,11 @@ int input_listener(int *selected)
 	{
 		*selected = (*selected + 1) < 6 ? *selected + 1 : 3;
 	}
+	else if (ch == KEY_ESC)
+	{
+		*selected = 0;
+		return (SELECTED);
+	}
 	return (NOT_SELECTED);
 }
 
@@ -100,6 +95,10 @@ int select_menu(void)
 	WINDOW *main_window = init();
 	endwin();
 	main_window = init();
+	if (main_window == NULL)
+	{
+		return 0;
+	}
 	display_options(main_window, selected);
 
 	while (1)
@@ -108,6 +107,10 @@ int select_menu(void)
 		{
 			endwin();
 			main_window = init();
+			if (main_window == NULL)
+			{
+				return 0;
+			}
 			received_signal = 0;
 		}
 		if (input_listener(&selected) == SELECTED)
