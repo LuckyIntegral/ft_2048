@@ -3,16 +3,16 @@
 
 static const char **ft_number(int n)
 {
-	static const char *one[5] = {" @ ", "@@ ", " @ ", " @ ", "@@@"};
-	static const char *two[5] = {"@@@", "  @", "@@@", "@  ", "@@@"};
-	static const char *three[5] = {"@@@", "  @", "@@@", "  @", "@@@"};
-	static const char *four[5] = {"@ @", "@ @", "@@@", "  @", "  @"};
-	static const char *five[5] = {"@@@", "@  ", "@@@", "  @", "@@@"};
-	static const char *six[5] = {"@@@", "@  ", "@@@", "@ @", "@@@"};
-	static const char *seven[5] = {"@@@", "  @", "  @", "  @", "  @"};
-	static const char *eight[5] = {"@@@", "@ @", "@@@", "@ @", "@@@"};
-	static const char *nine[5] = {"@@@", "@ @", "@@@", "  @", "@@@"};
-	static const char *zero[5] = {"@@@", "@ @", "@ @", "@ @", "@@@"};
+	static const char *one[5] = {" # ", "## ", " # ", " # ", "###"};
+	static const char *two[5] = {"###", "  #", "###", "#  ", "###"};
+	static const char *three[5] = {"###", "  #", "###", "  #", "###"};
+	static const char *four[5] = {"# #", "# #", "###", "  #", "  #"};
+	static const char *five[5] = {"###", "#  ", "###", "  #", "###"};
+	static const char *six[5] = {"###", "#  ", "###", "# #", "###"};
+	static const char *seven[5] = {"###", "  #", "  #", "  #", "  #"};
+	static const char *eight[5] = {"###", "# #", "###", "# #", "###"};
+	static const char *nine[5] = {"###", "# #", "###", "  #", "###"};
+	static const char *zero[5] = {"###", "# #", "# #", "# #", "###"};
 	static const char **numbers[10] = {zero, one, two, three, four, five, six, seven, eight, nine};
 
 	return numbers[n % 10];
@@ -113,6 +113,7 @@ void print_board(WINDOW *win, const int size, int board[size][size], const int n
 
 	clear();
 	box(win, 0, 0);
+
 	print_grid(size, nbr_len);
 	print_score(size, score);
 
@@ -123,7 +124,31 @@ void print_board(WINDOW *win, const int size, int board[size][size], const int n
 			if (board[row][col] == 0)
 				continue;
 			getxy(col, row, nbr_len, &x, &y);
+			if (board[row][col] == 2)
+				wattron(win, COLOR_PAIR(1));
+			if (board[row][col] == 4 || board[row][col] == 128)
+				wattron(win, COLOR_PAIR(2));
+			if (board[row][col] == 8 || board[row][col] == 256)
+				wattron(win, COLOR_PAIR(3));
+			if (board[row][col] == 16 || board[row][col] == 512)
+				wattron(win, COLOR_PAIR(4));
+			if (board[row][col] == 32 || board[row][col] == 1024)
+				wattron(win, COLOR_PAIR(5));
+			if (board[row][col] == 64 || board[row][col] == 2048)
+				wattron(win, COLOR_PAIR(6));
 			put_nbr_w(x, y, board[row][col]);
+			if (board[row][col] == 2)
+				wattroff(win, COLOR_PAIR(1));
+			if (board[row][col] == 4 || board[row][col] == 128)
+				wattroff(win, COLOR_PAIR(2));
+			if (board[row][col] == 8 || board[row][col] == 256)
+				wattroff(win, COLOR_PAIR(3));
+			if (board[row][col] == 16 || board[row][col] == 512)
+				wattroff(win, COLOR_PAIR(4));
+			if (board[row][col] == 32 || board[row][col] == 1024)
+				wattroff(win, COLOR_PAIR(5));
+			if (board[row][col] == 64 || board[row][col] == 2048)
+				wattroff(win, COLOR_PAIR(6));
 		}
 	}
 

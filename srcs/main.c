@@ -43,6 +43,12 @@ WINDOW	*init_game_window(void)
 	int width = 0, height = 0;
 
 	WINDOW *main_window = initscr();	// initialize ncurses and create a window
+	if(has_colors() == FALSE)
+	{
+		endwin();
+		ft_putendl_fd("Your terminal does not support color\n", 2);
+		exit(1);
+	}
 	signal(SIGWINCH, resize_handler);	// handle window resize
 	setlocale(LC_ALL, "");				// now we can use unicode
 	noecho(); 							// don't echo any keypresses
@@ -50,7 +56,12 @@ WINDOW	*init_game_window(void)
 	curs_set(0); 						// hide the cursor
 	nodelay(main_window, TRUE);			// make getch non-blocking
 	start_color();						// enable colors
-	init_pair(1, COLOR_WHITE, COLOR_BLACK);
+	init_pair(1, COLOR_RED, COLOR_BLACK);
+	init_pair(2, COLOR_GREEN, COLOR_BLACK);
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(4, COLOR_BLUE, COLOR_BLACK);
+	init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(6, COLOR_CYAN, COLOR_BLACK);
 
 	getmaxyx(main_window, height, width);
 	return (main_window);
@@ -58,9 +69,11 @@ WINDOW	*init_game_window(void)
 
 int put_won_window(void)
 {
-	WINDOW *won_window = newwin(5, 30, 10, 10);
+	WINDOW *won_window = newwin(5, 36, 10, 10);
 	box(won_window, 0, 0);
+	wattron(won_window, COLOR_PAIR(2));
 	mvwprintw(won_window, 2, 2, "You won! Press Enter to continue");
+	wattroff(won_window, COLOR_PAIR(2));
 	wrefresh(won_window);
 
 	while (1)
