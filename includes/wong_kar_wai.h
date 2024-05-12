@@ -18,7 +18,7 @@
 
 enum e_const
 {
-    WIN_VALUE = 2048
+    WIN_VALUE = 4096
 };
 
 # define ERROR_SMALL_SCREEN "Please resize the window to at least 99x29\n"
