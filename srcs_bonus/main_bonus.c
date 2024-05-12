@@ -1,17 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 14:28:52 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 18:22:26 by vfrants          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/wong_kar_wai.h"
-#include <ncurses.h>
 
 bool is_invalid_size(const int size, WINDOW *main_window)
 {
@@ -40,7 +28,6 @@ WINDOW	*init_game_window(void)
 		ft_putendl_fd("Your terminal does not support color\n", 2);
 	}
 	signal(SIGWINCH, resize_handler);	// handle window resize
-	setlocale(LC_ALL, "");				// now we can use unicode
 	noecho(); 							// don't echo any keypresses
 	keypad(stdscr, TRUE); 				// enable special keys like arrow keys
 	curs_set(0); 						// hide the cursor

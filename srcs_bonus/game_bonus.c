@@ -1,6 +1,5 @@
 
 #include "../includes/wong_kar_wai.h"
-#include <stdbool.h>
 
 static inline int is_full(int size, int board[size][size])
 {

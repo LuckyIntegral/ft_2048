@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   wong_kar_wai.h                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tkafanov <tkafanov@student.42vienna.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 13:34:40 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 18:39:26 by tkafanov         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef WONG_KAR_WAI_H
 # define WONG_KAR_WAI_H
@@ -18,8 +7,6 @@
 # include <ncurses.h>
 # include <stdbool.h>
 # include <signal.h>
-# include <stdlib.h>
-# include <locale.h>
 # include <time.h>
 
 # define GRID_THREE_MIN_WIDTH 39
@@ -40,7 +27,7 @@ enum e_const
 # define MAX_NICKNAME_LEN 10
 # define MAX_RECORD_LEN 30
 
-typedef unsigned long long int  t_score;
+typedef unsigned long long   t_score;
 
 typedef struct  s_record
 {

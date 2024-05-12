@@ -1,7 +1,5 @@
 
 #include "../includes/wong_kar_wai.h"
-#include <stdbool.h>
-#include <stdio.h>
 
 static t_score	stoscore(const char *str)
 {

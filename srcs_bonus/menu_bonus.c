@@ -1,17 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   menu.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vfrants <vfrants@student.42vienna.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 15:37:36 by vfrants           #+#    #+#             */
-/*   Updated: 2024/05/12 18:00:28 by vfrants          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/wong_kar_wai.h"
-#include <ncurses.h>
 
 void show_leaderboard(t_list *leaderboard)
 {
@@ -37,7 +25,6 @@ WINDOW	*init(void)
 
 	WINDOW *main_window = initscr();		// initialize ncurses and create a window
 	signal(SIGWINCH, resize_handler);		// handle window resize
-	setlocale(LC_ALL, "");					// now we can use unicode
 	noecho(); 								// don't echo any keypresses
 	keypad(stdscr, TRUE); 					// enable special keys like arrow keys
 	curs_set(0); 							// hide the cursor
