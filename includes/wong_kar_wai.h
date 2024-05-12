@@ -22,6 +22,7 @@ enum e_const
 };
 
 # define ERROR_SMALL_SCREEN "Please resize the window to at least 99x29\n"
+# define ERROR_BAD_USERNAME "Please enter a valid username\n"
 # define KEY_ESC 27
 # define LEADERBOARD_FILE "leaderboard.txt"
 # define MAX_NICKNAME_LEN 10

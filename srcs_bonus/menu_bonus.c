@@ -97,6 +97,7 @@ static int select_dificulty(t_list *leaderboard)
 	if (main_window == NULL)
 	{
 		endwin();
+		ft_putendl_fd(ERROR_SMALL_SCREEN, 2);
 		return 0;
 	}
 	display_options(main_window, selected, leaderboard);
@@ -108,7 +109,7 @@ static int select_dificulty(t_list *leaderboard)
 			endwin();
 			main_window = init();
 			if (main_window == NULL)
-				return 0;
+				return (ft_putendl_fd(ERROR_SMALL_SCREEN, 2), 0);
 			received_signal = 0;
 		}
 		if (input_listener(&selected) == SELECTED)
@@ -189,6 +190,8 @@ int select_menu(char **username, t_list *leaderboard)
 {
 	*username = get_username(leaderboard);
 	if (!*username)
-		return (0);
-	return (select_dificulty(leaderboard));
+		return (ft_putendl_fd(ERROR_BAD_USERNAME, 2), 0);
+
+	int status = select_dificulty(leaderboard);
+	return (status);
 }

@@ -135,7 +135,7 @@ int main()
 		if (size == 0)
 		{
 			ft_lstclear(&leaderboard, free_record);
-			return (ft_putendl_fd(ERROR_SMALL_SCREEN, 2), 0);
+			return (0);
 		}
 	}
 	const int nbr_len = size == 3 ? SIZE_THREE : size == 4 ? SIZE_FOUR : SIZE_FIVE;
